@@ -47,7 +47,7 @@ class SpotifyToYT {
       }
     }, options)
   }
-
+  
   /**
    * @description Validate that the URL is an Spotify URL or Playlist  
    * 
