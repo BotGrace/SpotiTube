@@ -21,7 +21,8 @@ class SpotifyToYT {
    * @param {String} options.spotify.secretKey Client ID of Spotify App
    * @param {RegExp} [options.spotify.regex=/(https?:\/\/open\.spotify\.com\/(playlist|track)\/[a-zA-Z0-9]+|spotify:(playlist|track):[a-zA-Z0-9])/g] The regex to vaildate spotify Strings
    * @param {Object} options.lavalink The Object for LavaLink
-   * @param {String} options.lavalink.url Client ID of Spotify App
+   * @param {String} options.lavalink.url The lavalink url w/ http:// or https://
+   * @param {String} options.lavalink.password Lavalink password 
    * @returns {Object}
    * 
    * @example
@@ -31,7 +32,8 @@ class SpotifyToYT {
    *    secretKey: "SECRETKEY"
    *  },
    *  lavalink: {
-   *    url: "http://localhost:2869"
+   *    url: "http://localhost:2869",
+   *    password: "password"
    *  }
    * })
    */
@@ -44,7 +46,8 @@ class SpotifyToYT {
         regex: /(https?:\/\/open\.spotify\.com\/(playlist|track)\/[a-zA-Z0-9]+|spotify:(playlist|track):[a-zA-Z0-9])/g
       },
       lavalink: {
-        url: null
+        url: null,
+        password: null
       }
     }, options)
 
