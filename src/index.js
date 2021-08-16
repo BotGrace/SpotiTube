@@ -6,14 +6,11 @@ const { getTracks, getData } = require("spotify-url-info");
 const spotifyURI = require("spotify-uri");
 const request = require("request");
 
-/**
- * Converts Spotify To YT with the help of LavaLink
- * @author Gaeta 
- */
 
 class SpotifyToYT {
   /**
    * @description The options that SpotifyToYT will use to convert and link with lavalink.
+   * @author Gaeta 
    * 
    * @param {Object} options The Options Object
    * @param {Object} options.spotify The Object for Spotify
