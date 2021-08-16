@@ -1,4 +1,4 @@
-name: GitHub pages
+name: Docs Auto Build
 
 on:
   push:
@@ -10,9 +10,6 @@ jobs:
     runs-on: ubuntu-20.04
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
-    defaults:
-      run:
-        working-directory: website
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -33,15 +30,18 @@ jobs:
           key: ${{ runner.os }}-website-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-website-
+      
+      - name: Install Pacakges
+        run: yarn install --frozen-lockfile
 
-      - run: yarn install --frozen-lockfile
-      - run: yarn build
+      - name: Build Docs
+        run: yarn run docs:build
 
-      - name: Deploy
+      - name: Deploy To GH Pages
         uses: peaceiris/actions-gh-pages@v3
         if: ${{ github.ref == 'refs/heads/master' }}
         with:
           deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
-          publish_dir: ./website/build
+          publish_dir: ./docs
           publish_branch: gh-pages
           cname: spotifytoyt.git.gracebot.net
