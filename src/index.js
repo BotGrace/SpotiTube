@@ -1,7 +1,3 @@
-/**
- * Converts Spotify To YT with the help of LavaLink
- * @author Gaeta 
- */
 
 const Util = require("./util")
 const supportedTypes = ["playlist", "track"];
@@ -9,6 +5,11 @@ const spotifySearch = require("@ksolo/spotify-search");
 const { getTracks, getData } = require("spotify-url-info");
 const spotifyURI = require("spotify-uri");
 const request = require("request");
+
+/**
+ * Converts Spotify To YT with the help of LavaLink
+ * @author Gaeta 
+ */
 
 class SpotifyToYT {
   /**
