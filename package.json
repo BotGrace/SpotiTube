@@ -1,0 +1,37 @@
+{
+  "name": "spotifytoyt",
+  "version": "1.0.0",
+  "description": "A Converter That Will Convert Your Spotify To YT with LavaLink.",
+  "main": "src/index.js",
+  "scripts": {
+    "builddocs": "jsdoc -c ./.jsdoc.conf.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BotGrace/SpotifyToYT.git"
+  },
+  "keywords": [
+    "spotify",
+    "youtube",
+    "sty",
+    "lavalink",
+    "discord",
+    "music",
+    "grace"
+  ],
+  "author": "Gaeta",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/BotGrace/SpotifyToYT/issues"
+  },
+  "homepage": "https://github.com/BotGrace/SpotifyToYT#readme",
+  "dependencies": {
+    "@ksolo/spotify-search": "https://github.com/KrishnaSolo/spotify-search",
+    "request": "^2.88.2",
+    "spotify-uri": "^2.2.0",
+    "spotify-url-info": "^2.2.3"
+  },
+  "devDependencies": {
+    "jsdoc": "^3.6.7"
+  }
+}
