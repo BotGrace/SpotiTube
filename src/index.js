@@ -46,6 +46,11 @@ class SpotifyToYT {
         url: null
       }
     }, options)
+
+    /** 
+     * Load Creds
+     */
+     spotifySearch.setCredentials(this.options.clientID, this.spotify.secretKey);
   }
   
   /**
@@ -70,6 +75,25 @@ class SpotifyToYT {
         }
     } else return false;
   }
+
+  /**
+   * @description Checks wether the url is a track or playlist.
+   * 
+   * @param {any} url
+   * @returns {String}
+   * 
+   * @example
+   * 
+   * const type = await STYT.isisTrackOrPlaylist("https://open.spotify.com/track/5nTtCOCds6I0PHMNtqelas");
+   * console.log(type)
+   */
+  async isTrackOrPlaylist(url) {
+    if (!url) throw new Error('You did not specify the URL of Spotify!');
+    await validateURL(url);
+    let data = await getData(url);
+    return data.type;
+  }
+
 }
 
 module.exports = SpotifyToYT
