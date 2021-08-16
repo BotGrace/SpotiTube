@@ -3,12 +3,15 @@
   "recurseDepth": 10,
   "opts": {
     "recurse": true,
-    "destination": "./docs/"
+    "destination": "./docs/",
+    "theme_opts": {
+      "theme": "dark"
+    }
   },
   "source": {
     "include": ["src"],
     "includePattern": ".+\\.js(doc|x)?$",
-    "excludePattern": "node_modules"
+    "excludePattern": "node_modules|docs"
   },
   "tags": {
     "allowUnknownTags": true,
