@@ -54,7 +54,7 @@ class SpotifyToYT {
     if (!this.options.spotify.clientID || !this.options.spotify.secretKey) throw new Error('Missing Spotify Client ID Or Spotify Secrect Key');
     if (!this.options.lavalink.url || !this.options.lavalink.password) throw new Error('Missing Lava Link URL Or Lava Link Password');
     
-    //Update URL to have URL refs
+    // Update URL to have URL refs
     this.options.lavalink.url = new URL(this.options.lavalink.url);
 
     // Load Creds
@@ -107,13 +107,13 @@ class SpotifyToYT {
   /**
    * @description Checks wether the url is a track or playlist.
    * 
-   * @param {any} url
+   * @param {any} url The url you want to check.
    * @returns {String}
    * 
    * @example
    * 
    * const type = await STYT.isisTrackOrPlaylist('https://open.spotify.com/track/5nTtCOCds6I0PHMNtqelas');
-   * console.log(type)
+   * console.log(type) // Either "track" or "playlist"
    */
   async isTrackOrPlaylist(url) {
     if (!url) throw new Error('You did not specify the URL of Spotify!');
@@ -125,7 +125,7 @@ class SpotifyToYT {
   /**
    * @description Converts the spotify url to youtube either.
    * 
-   * @param {any} url
+   * @param {any} url The url you want to convert.
    * @returns {Object}
    * 
    * @example
@@ -191,7 +191,7 @@ class SpotifyToYT {
   /**
    * @description Search on lavalink.
    * 
-   * @param {String} search
+   * @param {String} search The search query to send to lavalink.
    * @returns {Object}
    * 
    * @example
