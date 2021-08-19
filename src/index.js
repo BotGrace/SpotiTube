@@ -25,14 +25,14 @@ class SpotifyToYT {
    * 
    * @example
    * const STYT = SpotifyToYT({
-   *  spotify: {
-   *    clientID: 'CLIENTID',
-   *    secretKey: 'SECRETKEY'
-   *  },
-   *  lavalink: {
-   *    url: 'http://localhost:2869',
-   *    password: 'password'
-   *  }
+   *    spotify: {
+   *      clientID: 'CLIENTID',
+   *      secretKey: 'SECRETKEY'
+   *    },
+   *    lavalink: {
+   *      url: 'http://localhost:2869',
+   *      password: 'password'
+   *    }
    * })
    */
   constructor(options = {}) {
@@ -50,20 +50,14 @@ class SpotifyToYT {
 
     this.supportedTypes = ['playlist', 'track'];
 
-    /** 
-     * Check for correct strings
-     */
+    // Check for correct strings
     if (!this.options.spotify.clientID || !this.options.spotify.secretKey) throw new Error('Missing Spotify Client ID Or Spotify Secrect Key');
     if (!this.options.lavalink.url || !this.options.lavalink.password) throw new Error('Missing Lava Link URL Or Lava Link Password');
     
-    /** 
-     * Update URL to have URL refs
-     */
+    //Update URL to have URL refs
     this.options.lavalink.url = new URL(this.options.lavalink.url);
 
-    /** 
-     * Load Creds
-     */
+    // Load Creds
     spotifySearch.setCredentials(this.options.spotify.clientID, this.options.spotify.secretKey);
 
   }
@@ -79,15 +73,15 @@ class SpotifyToYT {
     if (!url) throw new Error('You did not specify the URL of Spotify!');
     if (typeof url !== 'string') return false;
     if (this.options.spotify.regex.test(url)) {
-        let parsedURL = {}
-        try {
-            parsedURL = spotifyURI.parse(url);
-            if (!supportedTypes.includes(parsedURL.type)) return false;
-            if (!parsedURL) return false;
-            return true;
-        } catch (e) {
-            return false;
-        }
+      let parsedURL = {}
+      try {
+        parsedURL = spotifyURI.parse(url);
+        if (!supportedTypes.includes(parsedURL.type)) return false;
+        if (!parsedURL) return false;
+        return true;
+      } catch (e) {
+        return false;
+      }
     } else return false;
   }
 
@@ -129,9 +123,6 @@ class SpotifyToYT {
     if (!this.supportedTypes.includes(getSpotifyData.type)) throw new Error(`${getSpotifyData.type} is not a support format only ${this.supportedTypes.join()}`);
 
     if (getSpotifyData.type === "track") {
-      /** 
-       * Track
-       */
         let result;
         try {
           result = await this.search(`${getSpotifyData.name} ${getSpotifyData.artists.map(x => x.name).join(' ')}`)
@@ -150,9 +141,6 @@ class SpotifyToYT {
           info: getSpotifyData
         }
     } else {
-      /** 
-       * Playlist
-       */
       let tracks = await getTracks(url);
       var songs = [];
       var failed = [];
