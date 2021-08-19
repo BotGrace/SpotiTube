@@ -35,8 +35,8 @@ jobs:
         run: yarn install --frozen-lockfile
 
       - name: Setup Git
-        run: git config --global user.name "${{ GITHUB_ACTOR }}"
-        run: git config --global user.email "${{ GITHUB_ACTOR }}@users.noreply.github.com"
+        run: git config --global user.name "${{ github.actor }}"
+        run: git config --global user.email "${{ github.actor }}@users.noreply.github.com"
 
       - name: Change Version
         run: npm version ${{ github.event.release.tag_name }}
