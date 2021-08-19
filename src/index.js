@@ -105,7 +105,7 @@ class SpotifyToYT {
   }
 
   /**
-   * @description Checks wether the url is a track or playlist.
+   * @description Checks whether the url is a track or playlist.
    * 
    * @param {any} url The url you want to check.
    * @returns {String}
