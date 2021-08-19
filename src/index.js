@@ -69,24 +69,28 @@ class SpotifyToYT {
    * @returns {Boolean}
    * 
    * @example
-   * 
-   * const type = await STYT.validateURL('https://open.spotify.com/track/5nTtCOCds6I0PHMNtqelas');
-   * console.log(type)
-   * 
-   * @example
-   * 
-   * const type = await STYT.validateURL('https://open.spotify.com/playlist/5B30UzmQQ6exwcZPwA8tbF?si=9df28e96ebf34267');
-   * console.log(type)
+   * (async () => {
+   *    const result = await STYT.validateURL('https://open.spotify.com/track/5nTtCOCds6I0PHMNtqelas');
+   *    console.log(result)
+   * })();
    * 
    * @example
-   * 
-   * const type = await STYT.validateURL('spotify:track:4aDSp2TuP7OSPvN9wrwcs5');
-   * console.log(type)
+   * (async () => {
+   *    const result = await STYT.validateURL('https://open.spotify.com/playlist/5B30UzmQQ6exwcZPwA8tbF?si=9df28e96ebf34267');
+   *    console.log(result)
+   * })();
    * 
    * @example
+   * (async () => {
+   *    const result = await STYT.validateURL('spotify:track:4aDSp2TuP7OSPvN9wrwcs5');
+   *    console.log(result)
+   * })();
    * 
-   * const type = await STYT.validateURL('spotify:playlist:5B30UzmQQ6exwcZPwA8tbF');
-   * console.log(type)
+   * @example
+   * (async () => {
+   *    const result = await STYT.validateURL('spotify:playlist:5B30UzmQQ6exwcZPwA8tbF');
+   *    console.log(result);
+   * })();
    */
   async validateURL (url) {
     if (!url) throw new Error('You did not specify the URL of Spotify!');
@@ -111,9 +115,10 @@ class SpotifyToYT {
    * @returns {String}
    * 
    * @example
-   * 
-   * const type = await STYT.isisTrackOrPlaylist('https://open.spotify.com/track/5nTtCOCds6I0PHMNtqelas');
-   * console.log(type) // Either "track" or "playlist"
+   * (async () => {
+   *    const result = await STYT.isisTrackOrPlaylist('https://open.spotify.com/track/5nTtCOCds6I0PHMNtqelas');
+   *    console.log(result); // Either "track" or "playlist"
+   * })();
    */
   async isTrackOrPlaylist(url) {
     if (!url) throw new Error('You did not specify the URL of Spotify!');
@@ -129,9 +134,10 @@ class SpotifyToYT {
    * @returns {Object}
    * 
    * @example
-   * 
-   * const type = await STYT.convert('https://open.spotify.com/track/5nTtCOCds6I0PHMNtqelas');
-   * console.log(type)
+   * (async () => {
+   *     const result = await STYT.convert('https://open.spotify.com/track/5nTtCOCds6I0PHMNtqelas');
+   *     console.log(result);
+   * })();
    */
 
   async convert(url) {
@@ -195,9 +201,10 @@ class SpotifyToYT {
    * @returns {Object}
    * 
    * @example
-   * 
-   * const result = await STYT.search('say something');
-   * console.log(result)
+   * (async () => {
+   *    const result = await STYT.search('say something');
+   *    console.log(result);
+   * })();
    */
 
   search (search) {
