@@ -2,9 +2,55 @@
 <html><head></head><body><h2 id="spotifytoyt">SpotifyToYT</h2>
 <hr />
 <h3 id="a-converter-that-will-convert-your-spotify-to-yt-with-lavalink">A Converter That Will Convert Your Spotify To YT with LavaLink.</h3>
-<p><a href="https://discordapp.com/invite/GuGcuwdYwg"><img src="https://img.shields.io/discord/469387242767646730?style=flat-square" alt="Discord" style="max-width: 100%;"></a>
+<p><a href="https://discordapp.com/invite/GuGcuwdYwg"><img src="https://img.shields.io/discord/469387242767646730?style=flat-square&amp;logo=discord&amp;logoColor=white" alt="Discord" style="max-width: 100%;"></a>
 <img src="https://img.shields.io/github/stars/BotGrace/SpotifyToYT?style=flat-square" alt="Github Stars" style="max-width: 100%;">
 <img src="https://img.shields.io/github/issues-raw/BotGrace/SpotifyToYT?style=flat-square" alt="GitHub issues" style="max-width: 100%;"></p>
 <!-- [![npm](https://img.shields.io/npm/v/SpotifyToYT?style=flat-square)](https://www.npmjs.com/package/SpotifyToYT) -->
 <!-- ![Snyk Vulnerabilities for npm package](https://img.shields.io/snyk/vulnerabilities/npm/SpotifyToYT?style=flat-square)  -->
-<!-- ![NPM](https://img.shields.io/npm/l/SpotifyToYT?style=flat-square) --></body></html>
+<!-- ![NPM](https://img.shields.io/npm/l/SpotifyToYT?style=flat-square) -->
+
+<blockquote>
+<p>Create by the Grace Bot Dev Team</p>
+</blockquote>
+<h3 id="features">Features</h3>
+<p>✅ Stable</p>
+<p>✅ Straightforward</p>
+<p>✅ Works with Lavalink</p>
+<p>✅ Works with any Spotify Link</p>
+<h3 id="installation">Installation</h3>
+<blockquote>
+<p>NPM (Stable) =&gt; npm install SpotifyToYT --save</p>
+</blockquote>
+<blockquote>
+<p>Github (Dev) =&gt; npm install botGrace/SpotifyToYT#next</p>
+</blockquote>
+<blockquote>
+<p>Npm (Dev) =&gt; npm install SpotifyToYT@dev</p>
+</blockquote>
+<h3 id="documentation-site">Documentation Site</h3>
+<blockquote>
+<p><a href="https://spotifytoyt.git.gracebot.net/">https://spotifytoyt.git.gracebot.net/</a></p>
+</blockquote>
+<h3 id="getting-lavalink">Getting Lavalink</h3>
+<p>Download the latest binaries from the <a href="https://ci.fredboat.com/viewType.html?buildTypeId=Lavalink_Build&amp;branch_Lavalink=refs%2Fheads%2Fdev&amp;tab=buildTypeStatusDiv&amp;guest=1">CI server (DEV BRANCH) (Recommended)</a> or <a href="https://ci.fredboat.com/viewLog.html?buildId=lastSuccessful&amp;buildTypeId=Lavalink_Build&amp;tab=artifacts&amp;guest=1">CI server Normal</a></p>
+<p>Put an <a href="https://github.com/freyacodes/Lavalink/blob/master/LavalinkServer/application.yml.example">application.yml</a> file in your working directory.</p>
+<p>Run with <code>java -jar Lavalink.jar</code></p>
+<p>Docker images are available on the <a href="https://hub.docker.com/r/fredboat/lavalink/">Docker</a> hub.</p>
+<h3 id="example-usage">Example Usage</h3>
+<p>Create SpotifyToYT instance </p>
+<pre><code class="js">const STYT = new SpotifyToYT({
+  spotify: {
+    clientID: 'CLIENTID',
+    secretKey: 'SECRETKEY'
+  },
+  lavalink: {
+    url: 'http://localhost:2869',
+    password: 'password'
+  }
+})</code></pre>
+<p>Convert Spotify To YT</p>
+<pre><code class="js">(async () =&gt; {
+  const result = await STYT.convert('https://open.spotify.com/track/5nTtCOCds6I0PHMNtqelas');
+  console.log(result);
+})();</code></pre>
+</body></html>
