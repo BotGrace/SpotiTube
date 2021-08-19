@@ -63,11 +63,30 @@ class SpotifyToYT {
   }
   
   /**
-   * @description Validate that the URL is an Spotify URL or Playlist  
+   * @description Validate that the URL is an Spotify URL
    * 
    * @param {Url} url The URL of the Spotify Track Or Playlist
    * @returns {Boolean}
    * 
+   * @example
+   * 
+   * const type = await STYT.validateURL('https://open.spotify.com/track/5nTtCOCds6I0PHMNtqelas');
+   * console.log(type)
+   * 
+   * @example
+   * 
+   * const type = await STYT.validateURL('https://open.spotify.com/playlist/5B30UzmQQ6exwcZPwA8tbF?si=9df28e96ebf34267');
+   * console.log(type)
+   * 
+   * @example
+   * 
+   * const type = await STYT.validateURL('spotify:track:4aDSp2TuP7OSPvN9wrwcs5');
+   * console.log(type)
+   * 
+   * @example
+   * 
+   * const type = await STYT.validateURL('spotify:playlist:5B30UzmQQ6exwcZPwA8tbF');
+   * console.log(type)
    */
   async validateURL (url) {
     if (!url) throw new Error('You did not specify the URL of Spotify!');
