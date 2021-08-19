@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/BotGrace/SpotifyToYT.git"
+    "url": "git+https://github.com/BotGrace/SpotiTube.git"
   },
   "keywords": [
     "spotify",
@@ -23,9 +23,9 @@
   "author": "Gaeta",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/BotGrace/SpotifyToYT/issues"
+    "url": "https://github.com/BotGrace/SpotiTube/issues"
   },
-  "homepage": "https://github.com/BotGrace/SpotifyToYT#readme",
+  "homepage": "https://github.com/BotGrace/SpotiTube#readme",
   "dependencies": {
     "@ksolo/spotify-search": "https://github.com/KrishnaSolo/spotify-search",
     "node-fetch": "^2.6.1",
