@@ -28,7 +28,7 @@
   "homepage": "https://github.com/BotGrace/SpotifyToYT#readme",
   "dependencies": {
     "@ksolo/spotify-search": "https://github.com/KrishnaSolo/spotify-search",
-    "request": "^2.88.2",
+    "node-fetch": "^2.6.1",
     "spotify-uri": "^2.2.0",
     "spotify-url-info": "^2.2.3"
   },
