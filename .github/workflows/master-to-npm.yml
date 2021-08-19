@@ -36,7 +36,7 @@ jobs:
         run: yarn install --frozen-lockfile
 
       - name: Deprecate old versions
-        run: npm deprecate spotifytoyt@"~$(jq --raw-output '.version' package.json)" "no longer supported" || true
+        run: npm deprecate spotitube@"~$(jq --raw-output '.version' package.json)" "no longer supported" || true
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       

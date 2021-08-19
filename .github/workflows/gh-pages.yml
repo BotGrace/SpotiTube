@@ -43,5 +43,5 @@ jobs:
           deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
           publish_dir: ./docs
           publish_branch: gh-pages
-          cname: spotifytoyt.git.gracebot.net
+          cname: spotitube.git.gracebot.net
           commit_message: ${{ github.event.head_commit.message }} - AUTO DOCS

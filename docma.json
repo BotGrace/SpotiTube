@@ -18,7 +18,7 @@
       "sanitize":false
   },
   "app":{
-      "title": "SpotifyToYT",
+      "title": "SpotiTube",
       "routing":"query",
       "entrance":"content:readme",
       "base":"/"
@@ -26,7 +26,7 @@
   "template":{
       "options":{
           "title":{
-              "label": "SpotifyToYT",
+              "label": "SpotiTube",
               "href":"."
           },
           "sidebar":{
@@ -62,7 +62,7 @@
                   },
                   {
                       "label":"GitHub",
-                      "href":"https://github.com/BotGrace/SpotifyToYT"
+                      "href":"https://github.com/BotGrace/SpotiTube"
                   },
                   {
                       "label": "Discord",

@@ -9,11 +9,12 @@ const fetch = require("node-fetch");
  * Converts Spotify To YT with the help of LavaLink
  */
 
-class SpotifyToYT {
+class SpotiTube {
   /**
-   * @description The options that SpotifyToYT will use to convert and link with lavalink.
+   * @description The options that SpotiTube will use to convert and link with lavalink.
    * 
    * @param {Object} options The Options Object
+   * @param {Boolean} [options.debug=false] If to show console log debugs. (Gets spammy!)
    * @param {Object} options.spotify The Object for Spotify
    * @param {String} options.spotify.clientID Client ID of Spotify App
    * @param {String} options.spotify.secretKey Client ID of Spotify App
@@ -24,7 +25,8 @@ class SpotifyToYT {
    * @returns {Object}
    * 
    * @example
-   * const STYT = new SpotifyToYT({
+   * const STYT = new SpotiTube({
+   *    debug: true,
    *    spotify: {
    *      clientID: 'CLIENTID',
    *      secretKey: 'SECRETKEY'
@@ -37,6 +39,7 @@ class SpotifyToYT {
    */
   constructor(options = {}) {
     this.options = Util.mergeDefault({
+      debug: false,
       spotify: {
         clientID: null,
         secretKey: null,
@@ -111,7 +114,7 @@ class SpotifyToYT {
   /**
    * @description Checks whether the url is a track or playlist.
    * 
-   * @param {any} url The url you want to check.
+   * @param {URL} url The url you want to check.
    * @returns {String}
    * 
    * @example
@@ -124,35 +127,53 @@ class SpotifyToYT {
     if (!url) throw new Error('You did not specify the URL of Spotify!');
     if (!this.validateURL(url)) throw new Error('Url is not a match to the regex!') ;
     let data = await getData(url);
+    if (this.options.debug) console.log(`${url} = ${data.type}`)
     return data.type;
   }
 
   /**
    * @description Converts the spotify url(s) to a youtube result.
    * 
-   * @param {any} url The url you want to convert.
+   * @param {URL} url The url you want to convert.
+   * @param {Number} [limit=Infinity] Limit how many songs we should convert. The bigger the number the longer the process might take.
+   * @param {Boolean} [failedLimit=true] Let failed song searches include in the overall limit checks.
    * @returns {Object}
    * 
    * @example
    * (async () => {
-   *     const result = await STYT.convert('https://open.spotify.com/track/5nTtCOCds6I0PHMNtqelas');
+   *     const result = await STYT.convert('https://open.spotify.com/track/5nTtCOCds6I0PHMNtqelas', 200, true);
+   *     console.log(result);
+   * })();
+   * 
+   * @example
+   * (async () => {
+   *     const result = await STYT.convert('https://open.spotify.com/track/5nTtCOCds6I0PHMNtqelas', Infinity, true); // Infinity will allow you to get all results
    *     console.log(result);
    * })();
    */
 
-  async convert(url) {
+  async convert(url, limit = Infinity, failedLimit = true) {
     if (!url) throw new Error('You did not specify the URL of Spotify!');
     if (!this.validateURL(url)) throw new Error('Url is not a match to the regex!');
+    if (!limit || limit < 1) limit = Infinity
+    if (failedLimit !== false && failedLimit !== true) failedLimit = false
+
+    if (this.options.debug) console.log(`Getting ${url} with limit of ${limit} with ${failedLimit ? 'failed searches being included with limit' : 'failed searches not being included with limit'}`)
+
     let getSpotifyData = await getData(url);
+    if (this.options.debug) console.log(`${url} = ${getSpotifyData.type}`)
 
     if (!this.supportedTypes.includes(getSpotifyData.type)) throw new Error(`${getSpotifyData.type} is not a support format only ${this.supportedTypes.join()}`);
 
     if (getSpotifyData.type === "track") {
+        if (this.options.debug) console.log(`${url} is an ${getSpotifyData.type} so limits will not work on this`)
         let result;
         try {
           result = await this.search(`${getSpotifyData.name} ${getSpotifyData.artists.map(x => x.name).join(' ')}`)
+          if (this.options.debug) console.log(`${url} => ${result.uri}`)
         } catch (error) {
           result = null;
+          if (this.options.debug) console.log(`${url} was not found`)
           console.log(error)
         }
         return {
@@ -163,18 +184,25 @@ class SpotifyToYT {
               info: result
             }] : []
           },
-          info: getSpotifyData
+          info: getSpotifyData,
+          limit: limit,
+          converted: !result ? 0 : 1
         }
     } else {
       let tracks = await getTracks(url);
       var songs = [];
       var failed = [];
       for (const song of tracks) {
+        if ((failedLimit ? failed.length + songs.length : songs.length) >= limit) break;
+        if (this.options.debug) console.log(`${url} Current searches: ${(failedLimit ? failed.length + songs.length : songs.length)} w/ limit of ${limit}.`)
+
         let result;
         try {
           result = await this.search(`${song.name} ${song.artists.map(x => x.name).join(' ')}`)
+          if (this.options.debug) console.log(`${song?.external_urls?.spotify || song.uri} => ${result.uri}`)
         } catch (error) {
           result = null;
+          if (this.options.debug) console.log(`${song?.external_urls?.spotify || song.uri} was not found`)
           console.log(error)
         }
         if (!result) failed.push(song?.external_urls?.spotify || song.uri)
@@ -183,12 +211,19 @@ class SpotifyToYT {
           info: result
         })
       }
+      if (this.options.debug) console.log(`${getSpotifyData?.external_urls?.spotify || getSpotifyData.uri} was converted to ${songs.length} with ${failed.songs} with limit ${limit}`)
       return {
         songs: {
           failed: failed,
           completed: songs
         },
-        info: getSpotifyData
+        info: getSpotifyData,
+        limit: limit,
+        converted: {
+          failed: failed?.length || 0,
+          completed: songs?.length || 0,
+          total: (failed?.length + songs?.length) || 0
+        }
       }
     }
 
@@ -213,7 +248,6 @@ class SpotifyToYT {
 
     let searchRequest = new URL(this.options.lavalink.url.href + 'loadtracks');
     searchRequest.searchParams.append("identifier", 'ytsearch:' + search)
-    console.log(searchRequest.toString())
     return fetch(searchRequest.toString(), { headers: { Authorization: this.options.lavalink.password } })
       .then(res => res.json())
       .then(data => {
@@ -229,4 +263,4 @@ class SpotifyToYT {
 
 }
 
-module.exports = SpotifyToYT
+module.exports = SpotiTube
