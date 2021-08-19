@@ -1,0 +1,44 @@
+name: Publish Dev Version to npm
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+  steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Install Node v16
+      uses: actions/setup-node@v2
+      with:
+        node-version: 16
+        registry-url: https://registry.npmjs.org/
+    - name: Get yarn cache
+      id: yarn-cache
+      run: echo "::set-output name=dir::$(yarn cache dir)"
+    - name: Cache dependencies
+      uses: actions/cache@v2
+      with:
+        path: ${{ steps.yarn-cache.outputs.dir }}
+        key: ${{ runner.os }}-devpublish-${{ hashFiles('**/yarn.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-devpublish-
+    
+    - name: Install Pacakges
+      run: yarn install --frozen-lockfile
+
+    - name: Deprecate old versions
+      run: npm deprecate spotifytoyt@"~$(jq --raw-output '.version' package.json)" "no longer supported" || true
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+    
+    - name: Publish
+    run: |
+      npm version --git-tag-version=false $(jq --raw-output '.version' package.json).$(date +%s).$(git rev-parse --short HEAD)
+      npm publish --tag dev || true
+    env:
+      NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
