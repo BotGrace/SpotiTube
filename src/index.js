@@ -24,7 +24,7 @@ class SpotifyToYT {
    * @returns {Object}
    * 
    * @example
-   * const STYT = SpotifyToYT({
+   * const STYT = new SpotifyToYT({
    *    spotify: {
    *      clientID: 'CLIENTID',
    *      secretKey: 'SECRETKEY'
