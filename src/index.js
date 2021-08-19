@@ -63,7 +63,7 @@ class SpotifyToYT {
   }
   
   /**
-   * @description Validate that the URL is an Spotify URL
+   * @description Validate that the URL is a Spotify URL
    * 
    * @param {Url} url The URL of the Spotify Track Or Playlist
    * @returns {Boolean}
@@ -123,7 +123,7 @@ class SpotifyToYT {
   }
 
   /**
-   * @description Converts the spotify url to youtube either.
+   * @description Converts the spotify url(s) to a youtube result.
    * 
    * @param {any} url The url you want to convert.
    * @returns {Object}
