@@ -34,8 +34,10 @@ jobs:
       - name: Install Pacakges
         run: yarn install --frozen-lockfile
 
-      - name: Setup Git
+      - name: Setup Git username
         run: git config --global user.name "${{ github.actor }}"
+
+      - name: Setup Git email
         run: git config --global user.email "${{ github.actor }}@users.noreply.github.com"
 
       - name: Change Version
