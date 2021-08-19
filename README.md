@@ -25,7 +25,7 @@
  
 > NPM (Stable) => npm install SpotifyToYT --save
 
-> Github (Dev) => npm install botGrace/SpotifyToYT#next
+> Github (Dev) => npm install botGrace/SpotifyToYT#master
 
 > Npm (Dev) => npm install SpotifyToYT@dev
 
