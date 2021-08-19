@@ -7,7 +7,9 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
   steps:
     - name: Checkout code
       uses: actions/checkout@v2
@@ -17,9 +19,11 @@ jobs:
       with:
         node-version: 16
         registry-url: https://registry.npmjs.org/
+
     - name: Get yarn cache
       id: yarn-cache
       run: echo "::set-output name=dir::$(yarn cache dir)"
+
     - name: Cache dependencies
       uses: actions/cache@v2
       with:
