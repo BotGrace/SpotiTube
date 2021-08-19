@@ -8,7 +8,7 @@
 <!-- ![Snyk Vulnerabilities for npm package](https://img.shields.io/snyk/vulnerabilities/npm/SpotifyToYT?style=flat-square)  -->
 <!-- ![NPM](https://img.shields.io/npm/l/SpotifyToYT?style=flat-square) -->
 
-> Create by the Grace Bot Dev Team
+> Created by the Grace Bot Dev Team
 
 ### Features
 
