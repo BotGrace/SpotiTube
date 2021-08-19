@@ -1,9 +1,8 @@
-name: Docs Auto Build
+name: Docs Auto Build On Publish
 
 on:
-  push:
-    branches:
-      - master
+  release:
+    types: [published]
 
 jobs:
   deploy:
