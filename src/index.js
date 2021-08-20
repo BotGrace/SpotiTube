@@ -102,7 +102,7 @@ class SpotiTube {
       let parsedURL = {}
       try {
         parsedURL = spotifyURI.parse(url);
-        if (!supportedTypes.includes(parsedURL.type)) return false;
+        if (!this.supportedTypes.includes(parsedURL.type)) return false;
         if (!parsedURL) return false;
         return true;
       } catch (e) {

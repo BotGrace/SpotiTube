@@ -24,11 +24,11 @@
 
 ### Installation
  
-> NPM (Stable) => npm install SpotiTube --save
+> NPM (Stable) => npm install spotitube --save
 
 > Github (Dev) => npm install botGrace/SpotiTube#master
 
-> Npm (Dev) => npm install SpotiTube@dev
+> Npm (Dev) => npm install spotitube@dev
 
 ### Documentation Site
 
