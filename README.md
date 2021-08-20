@@ -4,9 +4,10 @@
 [![Discord](https://img.shields.io/discord/469387242767646730?style=flat-square&logo=discord&logoColor=white)](https://discordapp.com/invite/GuGcuwdYwg)
 ![Github Stars](https://img.shields.io/github/stars/BotGrace/SpotiTube?style=flat-square)
 ![GitHub issues](https://img.shields.io/github/issues-raw/BotGrace/SpotiTube?style=flat-square)
-[![npm](https://img.shields.io/npm/v/spotitube?style=flat-square)](https://www.npmjs.com/package/spotitube)
-![Snyk Vulnerabilities for npm package](https://img.shields.io/snyk/vulnerabilities/npm/spotitube?style=flat-square) 
-![NPM](https://img.shields.io/npm/l/spotitube?style=flat-square)
+[![npm](https://img.shields.io/npm/v/spotitube?style=flat-square&maxAge=3600)](https://www.npmjs.com/package/spotitube)
+[![npm downloads](https://img.shields.io/npm/dt/spotitube?style=flat-square&maxAge=3600)](https://www.npmjs.com/package/spotitube)
+![Snyk Vulnerabilities for npm package](https://img.shields.io/snyk/vulnerabilities/npm/spotitube?style=flat-square&maxAge=3600) 
+![NPM](https://img.shields.io/npm/l/spotitube?style=flat-square&maxAge=3600)
 
 > Created by the Grace Bot Dev Team!
 
