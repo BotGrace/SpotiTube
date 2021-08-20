@@ -1,6 +1,6 @@
 {
   "name": "spotitube",
-  "version": "1.0.3-dev",
+  "version": "1.0.4-dev",
   "description": "A Converter That Will Convert Your Spotify To YT with LavaLink.",
   "main": "src/index.js",
   "scripts": {
