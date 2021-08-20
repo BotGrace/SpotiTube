@@ -27,10 +27,10 @@
   },
   "homepage": "https://github.com/BotGrace/SpotiTube#readme",
   "dependencies": {
-    "@ksolo/spotify-search": "https://github.com/KrishnaSolo/spotify-search",
     "node-fetch": "^2.6.1",
     "spotify-uri": "^2.2.0",
-    "spotify-url-info": "^2.2.3"
+    "spotify-url-info": "^2.2.3",
+    "spotify-web-api-node": "^5.0.2"
   },
   "devDependencies": {
     "docma": "^3.2.2",
