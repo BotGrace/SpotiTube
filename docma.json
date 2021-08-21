@@ -53,20 +53,26 @@
               "animations":true,
               "menu":[
                   {
-                      "label":"Readme",
-                      "href":"."
+                      "label": "Home",
+                      "href":".",
+                      "iconClass": "fas fa-home"
                   },
                   {
                       "label":"Documentation",
-                      "href":"?api"
+                      "href":"?api",
+                      "iconClass": "fas fa-book"
                   },
                   {
                       "label":"GitHub",
-                      "href":"https://github.com/BotGrace/SpotiTube"
+                      "href":"https://github.com/BotGrace/SpotiTube",
+                      "target": "_blank",
+                      "iconClass": "fab fa-github"
                   },
                   {
                       "label": "Discord",
-                      "href": "https://discord.gg/GuGcuwdYwg"
+                      "href": "https://discord.gg/GuGcuwdYwg",
+                      "target": "_blank",
+                      "iconClass": "fab fa-discord"
                   }
               ]
           }

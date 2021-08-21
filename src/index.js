@@ -2,17 +2,17 @@
 const Util = new require('./util');
 const fetch = require("node-fetch");
 const SpotifyWebApi = require('spotify-web-api-node');
+const EventEmitter = require("events");
 
 /**
  * Converts Spotify To YT with the help of LavaLink
  */
 
-class SpotiTube {
+class SpotiTube extends EventEmitter {
   /**
    * @description The options that SpotiTube will use to convert and link with lavalink.
    * 
    * @param {Object} options The Options Object
-   * @param {Boolean} [options.debug=false] If to show console log debugs. (Gets spammy!)
    * @param {Object} options.spotify The Object for Spotify
    * @param {String} options.spotify.clientID Client ID of Spotify App
    * @param {String} options.spotify.secretKey Client ID of Spotify App
@@ -22,11 +22,15 @@ class SpotiTube {
    * @param {Object} options.lavalink The Object for LavaLink
    * @param {String} options.lavalink.url The lavalink url w/ http:// or https://
    * @param {String} options.lavalink.password Lavalink password 
+   * @param {Object=} options.redis The Object for Redis (To use redis put host & port)
+   * @param {String=} options.lavalink.host The ip of redis (Redis default is 127.0.0.1)
+   * @param {String=} options.lavalink.password The password of redis if one exist
+   * @param {Number=} [options.lavalink.port=6379] The port of redis defaults to 6379
+   * @param {Number=} options.lavalink.db The db to use on redis
    * @returns {Object}
    * 
    * @example
    * const STYT = new SpotiTube({
-   *    debug: true,
    *    spotify: {
    *      clientID: 'CLIENTID',
    *      secretKey: 'SECRETKEY'
@@ -34,10 +38,16 @@ class SpotiTube {
    *    lavalink: {
    *      url: 'http://localhost:2869',
    *      password: 'password'
-   *    }
+   *    },
+   *   redis: {
+   *      host: "127.0.0.1",
+   *      post: 6379,
+   *      db: null
+   *   }
    * })
    */
   constructor(options = {}) {
+    super();
     this.options = Util.mergeDefault({
       debug: false,
       spotify: {
@@ -50,6 +60,12 @@ class SpotiTube {
       lavalink: {
         url: null,
         password: null
+      },
+      redis: {
+        host: null,
+        password: null,
+        post: 6379,
+        db: null
       }
     }, options)
 
@@ -68,11 +84,67 @@ class SpotiTube {
       clientSecret: this.options.spotify.secretKey
     });
 
+    // Load Redis
+    if (this.options.redis.host && this.options.redis.port) {
+
+      this.redis = require("redis").createClient(this.options.redis);
+
+      // Redis Error Event Reconnect
+      this.redis.on("error", err => {
+        if (err?.toString()?.includes('ECONNRESET')) {
+          setTimeout(() => {
+            redisCon = redis.createClient({...Config.redisVote});
+          }, 15000);
+        }
+      });
+
+      // Redis Error Event
+      this.redis.on("error", (...args) => this.emit('error', ...args));
+
+      // Redis Ready Event
+      this.redis.on("ready", (...args) => this.emit('debug', ...args));
+
+      // Redis Connect Event
+      this.redis.on("connect", (...args) => this.emit('debug', ...args));
+
+      // Redis Reconnecting Event
+      this.redis.on("reconnecting", (...args) => this.emit('debug', ...args));
+    } else {
+      console.log("hi")
+      this.redis = null;
+      this.emit("debug", "No Redis Host & Port. Redis will not be used.")
+    }
+
+    // Load Any Unknown Errors
+    process.on('uncaughtException', (...args) => this.emit('error', ...args));
+
     // Retrieve an access token.
     if (this.options.spotify.clientAccessToken && this.options.spotify.clientAccessExpire) this.initCreds({force: true, access_token: this.options.spotify.clientAccessToken, expires_in: this.options.spotify.clientAccessExpire})
     // else this.spotifySearch.clientCredentialsGrant().then(res => this.initCreds(res.body)).catch(e => console.log(e))
 
   }
+
+  /**
+   * @description Debug related events
+   * This will include Redis Events
+   * 
+   * @event SpotiTube#debug
+   * @param {string} info The debug info
+   * 
+   * @example
+   * SpotiTube.on("debug", console.log);
+   */
+
+  /**
+   * @description When the process has an error event.
+   * This will include Redis Error Event
+   * 
+   * @event SpotiTube#error
+   * @param {Error} error The error object
+   * 
+   * @example
+   * SpotiTube.on("error", console.log);
+   */
 
   /**
    * @description Loads/Creates/Checks the auth token to the Spotify Web API.
@@ -92,16 +164,16 @@ class SpotiTube {
       force: false
     }, settings)
     if ((!this.options.spotify.clientAccessExpire || !this.options.spotify.clientAccessExpire) && (!settings.access_token || !settings.expires_in) && !settings.force) {
-      if (this.options.debug) console.log("There is no login detect and none were sent with function. Creating login and restarting function")
-      return this.spotifySearch.clientCredentialsGrant().then(res => this.initCreds(res.body)).catch(e => console.log(e));
+      this.emit("debug", "There is no login detect and none were sent with function. Creating login and restarting function")
+      return this.spotifySearch.clientCredentialsGrant().then(res => this.initCreds(res.body)).catch(e => this.emit("error", e));
     } else if ((new Date(new Date().getTime() + (1000 * 120)) >= this.options.spotify.clientAccessExpire) && (!settings.access_token || !settings.expires_in) && !settings.force) {
-      if (this.options.debug) console.log("Current access token is expires or is within the 2 min mark. Creating new login and restarting function");
-      return this.spotifySearch.clientCredentialsGrant().then(res => this.initCreds(res.body)).catch(e => console.log(e));
+      this.emit("debug", "Current access token is expires or is within the 2 min mark. Creating new login and restarting function");
+      return this.spotifySearch.clientCredentialsGrant().then(res => this.initCreds(res.body)).catch(e => this.emit("error", e));
     } else if (settings.access_token || settings.expires_in) {
       this.spotifySearch.setAccessToken(settings.access_token)
       this.options.spotify.clientAccessToken = settings.access_token;
       this.options.spotify.clientAccessExpire = new Date(new Date().getTime() + (1000 * settings.expires_in));
-      if (this.options.debug) console.log(`Added Access token & Expire Time (${this.options.spotify.clientAccessExpire.getTime()})`);
+      this.emit("debug", `Added Access token & Expire Time (${this.options.spotify.clientAccessExpire.getTime()})`);
       return this.spotifySearch
     } else {
       return this.spotifySearch
@@ -144,8 +216,8 @@ class SpotiTube {
     if (this.options.spotify.regex.test(url)) {
       let parsedURL = {}
       try {
-        parsedURL = require('spotify-uri').parse(url);
-        if (!this.supportedTypes.includes(parsedURL.type)) return false;
+        parsedURL = require('spotify-uri')?.parse(url) || null;
+        if (!this.supportedTypes.includes(parsedURL?.type)) return false;
         if (!parsedURL) return false;
         return true;
       } catch (e) {
@@ -170,7 +242,7 @@ class SpotiTube {
     if (!url) throw new Error('You did not specify the URL of Spotify!');
     if (!this.validateURL(url)) throw new Error('Url is not a match to the regex!') ;
     let data = await require('spotify-url-info').getData(url);
-    if (this.options.debug) console.log(`${url} = ${data.type} from getInfo`)
+    this.emit("debug", `${url} = ${data.type} from getInfo`)
     return data;
   }
 
@@ -185,7 +257,7 @@ class SpotiTube {
    * @private
    */
 
-   async getPlaylist (id, options = {}) {
+  async getPlaylist (id, options = {}) {
     if (!id) throw new Error("Missing playlist ID")
     options = Util.mergeDefault({
       offset: 0,
@@ -196,13 +268,82 @@ class SpotiTube {
     return data?.body || null
   }
 
+  /**
+   * @description Checks Redis Cache.
+   * 
+   * @param {String} key The url you want to check.
+   * @returns {Object}
+   * @private
+   */
+
+  async getRedisCache (key) {
+    if (!key) throw new Error("Reddis Key");
+    if (!this.redis) return null;
+    return new Promise(async (resolve, reject) => {
+      this.redis.get(key, async (error, reply) => {
+        if (error) {
+          this.emit("error", error);
+          return resolve(null)
+        }
+        else {
+          if (reply) {
+            try {
+              if (JSON.parse(reply)) {
+                return resolve(JSON.parse(reply))
+              } else {
+                return resolve(reply)
+              }
+            } catch (e) {
+              return resolve(reply)
+            }
+          } else return resolve(null)
+        }
+      })
+    })
+  }
+
+  /**
+   * @description Set Redis Cache.
+   * 
+   * @param {String} key The url you want to check.
+   * @param {*} data The data to be cached.
+   * @returns {*}
+   * @private
+   */
+
+   async setRedisCache (key, data) {
+    if (!key) throw new Error("Reddis Key");
+    if (!data) throw new Error("Needs Value");
+    if (!this.redis) return null;
+
+    try {
+      if (JSON.stringify(data)) {
+        data = JSON.stringify(data)
+      }
+    } catch (e) {
+      console.log(e)
+    }
+
+    return new Promise(async (resolve, reject) => {
+      this.redis.set(key, data, async (error) =>{
+        if (error) {
+          this.emit("error", error)
+          return resolve(false)
+        } else {
+          this.emit("debug", `Key ${key} was set to ${data}`);
+          return resolve(true)
+        }
+      });
+    })
+
+  }
 
   /**
    * @description Converts the spotify url(s) to a youtube result.
    * The Longer the playlist on spotify the longer it will take
    * 
    * @param {URL} url The url you want to convert.
-   * @param {Number} [limit=Infinity] Limit how many songs we should convert. Use Infinity to allow the entire playlist, but the bigger the playlist the longer it will take to convert
+   * @param {Number} [limit=20] Limit how many songs we should convert. Use Infinity to allow the entire playlist, but the bigger the playlist the longer it will take to convert
    * @param {Boolean} [failedLimit=true] Let failed song searches include in the overall limit checks.
    * @returns {Object}
    * 
@@ -231,31 +372,32 @@ class SpotiTube {
    * })();
    */
 
-  async convert(url, limit = 10, failedLimit = true) {
+  async convert(url, limit = 20, failedLimit = true) {
     if (!url) throw new Error('You did not specify the URL of Spotify!');
     if (!this.validateURL(url)) throw new Error('Url is not a match to the regex!');
+    var start = new Date();
     await this.initCreds() // Make sure creds are correct
-    if (!limit || limit < 1) limit = 10
+    if (!limit || limit < 1) limit = 20
     if (failedLimit !== false && failedLimit !== true) failedLimit = false    
-    if (this.options.debug) console.log(`Getting ${url} with limit of ${limit} with ${failedLimit ? 'failed searches being included with limit' : 'failed searches not being included with limit'}`)
+    this.emit("debug", `Getting ${url} with limit of ${limit} with ${failedLimit ? 'failed searches being included with limit' : 'failed searches not being included with limit'}`)
 
     let getInfo = await this.getInfo(url);
 
-    if (this.options.debug) console.log(`${url} = ${getInfo.type} in convert`)
+    this.emit("debug", `${url} = ${getInfo.type} in convert`)
 
     if (!this.supportedTypes.includes(getInfo.type)) throw new Error(`${getInfo.type} is not a support format only ${this.supportedTypes.join()}`);
 
     if (getInfo.type === "track") {
       // track
-      if (this.options.debug) console.log(`${url} is an ${getInfo.type} so limits will not work on this`)
+      this.emit("debug", `${url} is an ${getInfo.type} so limits will not work on this`)
       let result;
       try {
         result = await this.searchLavaLink(`${getInfo.name} ${getInfo.artists.map(x => x.name).join(' ')}`)
-        if (this.options.debug) console.log(`${url} => ${result.uri}`)
+        this.emit("debug", `${url} => ${result.uri}`)
       } catch (error) {
         result = null;
-        if (this.options.debug) console.log(`${url} was not found`)
-        console.log(error)
+        this.emit("debug", `${url} was not found`)
+        this.emit("error", error)
       }
       return {
         songs: {
@@ -271,6 +413,12 @@ class SpotiTube {
           failed: !result ? 1 : 0,
           completed: result ? 1 : 0,
           total: 1
+        },
+        time: {
+          start: start,
+          end: new Date(),
+          executionMS: new Date() - start,
+          executionSec: (new Date() - start) / 1000
         }
       }
     } else if (getInfo.type === "playlist") {
@@ -291,21 +439,33 @@ class SpotiTube {
         if (tracks.length >= limit) next = false;
         else next = data2?.next ? true : false        
       }
-      if (this.options.debug) console.log(`Gathered a total of ${tracks.length} with a limitter set to ${limit}`)
+      this.emit("debug", `Gathered a total of ${tracks.length} with a limitter set to ${limit}`)
       var songs = [];
       var failed = [];
       for (let song of tracks) {
         song = song.track
         if ((failedLimit ? failed.length + songs.length : songs.length) >= limit) break;
-        if (this.options.debug) console.log(`${url} Current searches: ${(failedLimit ? failed.length + songs.length : songs.length)} w/ limit of ${limit}.`)
+        this.emit("debug", `${url} Current searches: ${(failedLimit ? failed.length + songs.length : songs.length)} w/ limit of ${limit}.`)
         let result;
         try {
-          result = await this.searchLavaLink(`${song.name} ${song.artists.map(x => x.name).join(' ')}`)
-          if (this.options.debug) console.log(`${song?.external_urls?.spotify || song.uri} => ${result.uri}`)
+          if (this.redis) {
+            let check = await this.getRedisCache(`${song.uri || 'spotify:' + song?.external_urls?.spotify}`);
+            if (!check) {
+              result = await this.searchLavaLink(`${song.name} ${song.artists.map(x => x.name).join(' ')}`);
+              await this.setRedisCache(`${song.uri || 'spotify:' + song?.external_urls?.spotify}`, result);
+              this.emit("debug", `${song?.external_urls?.spotify || song.uri} => ${result.uri} (Not From Cache)`)
+            } else {
+              result = check;
+              this.emit("debug", `${song?.external_urls?.spotify || song.uri} => ${result.uri} (From Cache)`)
+            }
+          } else {
+            result = await this.searchLavaLink(`${song.name} ${song.artists.map(x => x.name).join(' ')}`);
+            this.emit("debug", `${song?.external_urls?.spotify || song.uri} => ${result.uri}  (Not From Cache. Redis not being used)`)
+          }
         } catch (error) {
           result = null;
-          if (this.options.debug) console.log(`${song?.external_urls?.spotify || song.uri} was not found`)
-          console.log(error)
+          this.emit("debug", `${song?.external_urls?.spotify || song.uri} was not found`)
+          this.emit("error", error)
         }
         if (!result) failed.push(song?.external_urls?.spotify || song.uri)
         else songs.push({
@@ -313,7 +473,7 @@ class SpotiTube {
           info: result
         })
       }
-      if (this.options.debug) console.log(`${getInfo?.external_urls?.spotify || getInfo.uri} was converted to ${songs.length} with ${failed?.length} with limit ${limit}`)
+      this.emit("debug", `${getInfo?.external_urls?.spotify || getInfo.uri} was converted to ${songs.length} with ${failed?.length} with limit ${limit}`)
       return {
         songs: {
           failed: failed,
@@ -325,6 +485,12 @@ class SpotiTube {
           failed: failed?.length || 0,
           completed: songs?.length || 0,
           total: (failed?.length + songs?.length) || 0
+        },
+        time: {
+          start: start,
+          end: new Date(),
+          executionMS: new Date() - start,
+          executionSec: (new Date() - start) / 1000
         }
       }
     } else throw new Error(`${getInfo.type} is not a support format only ${this.supportedTypes.join()}`)

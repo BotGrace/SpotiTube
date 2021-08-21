@@ -5,7 +5,7 @@
   "main": "src/index.js",
   "scripts": {
     "docs:build": "docma build",
-    "docs:dev": "docma serve"
+    "docs:dev": "docma build && docma serve"
   },
   "repository": {
     "type": "git",
@@ -28,6 +28,7 @@
   "homepage": "https://github.com/BotGrace/SpotiTube#readme",
   "dependencies": {
     "node-fetch": "^2.6.1",
+    "redis": "^3.1.2",
     "spotify-uri": "^2.2.0",
     "spotify-url-info": "^2.2.3",
     "spotify-web-api-node": "^5.0.2"

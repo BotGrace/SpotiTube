@@ -108,3 +108,4 @@ yarn.lock
 package-lock.json
 
 /test
+/docs

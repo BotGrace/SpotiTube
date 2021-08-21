@@ -9,10 +9,10 @@
 ![Snyk Vulnerabilities for npm package](https://img.shields.io/snyk/vulnerabilities/npm/spotitube?style=flat-square&maxAge=3600) 
 ![NPM](https://img.shields.io/npm/l/spotitube?style=flat-square&maxAge=3600)
 
-> Created by the Grace Bot Dev Team!
+> Created with ❤️ by the Grace Bot Dev Team _aka Spooder/Gaeta_!
 
 ## **WARNING**
-Master Branch is on **[v1.0.4-dev (Dev)](https://github.com/BotGrace/SpotiTube/tree/master)**! This almost a full rewrite from **[v1.0.3 (Stable)](https://github.com/BotGrace/SpotiTube/tree/v1.0.3)** branch! Please check the readme and the stable docs to understand v1.0.3!
+Master branch is on **[v1.0.4-dev (Dev)](https://github.com/BotGrace/SpotiTube/tree/master)**! This almost a full rewrite from **[v1.0.3 (Stable)](https://github.com/BotGrace/SpotiTube/tree/v1.0.3)** branch! Please check the readme and the stable docs to understand v1.0.3!
 
 ## Features
 
@@ -30,21 +30,21 @@ Master Branch is on **[v1.0.4-dev (Dev)](https://github.com/BotGrace/SpotiTube/t
 
 ## Installation
  
-> NPM (Stable) => npm install spotitube --save
+> NPM (Stable) => `npm install spotitube --save`
 
-> Github (Dev) => npm install botGrace/SpotiTube#master
+> Github (Dev) => `npm install botGrace/SpotiTube#master`
 
-> Npm (Dev) => npm install spotitube@dev
+> Npm (Dev) => `npm install spotitube@dev`
 
 ## Documentation Site
 
 > Stable => https://SpotiTube.git.gracebot.net/
 
-> Dev => None
+> Dev => `git clone https://github.com/BotGrace/SpotiTube#master && cd ./SpotiTube && yarn install && yarn run docs:dev`
 
 ## Getting Lavalink
 
-Download the latest binaries from the [CI server (DEV BRANCH) (Recommended)](https://ci.fredboat.com/viewType.html?buildTypeId=Lavalink_Build&branch_Lavalink=refs%2Fheads%2Fdev&tab=buildTypeStatusDiv&guest=1) or [CI server Normal](https://ci.fredboat.com/viewLog.html?buildId=lastSuccessful&buildTypeId=Lavalink_Build&tab=artifacts&guest=1)
+Download the latest binaries from the [CI server (DEV BRANCH) (Recommended)](https://ci.fredboat.com/viewType.html?buildTypeId=Lavalink_Build&branch_Lavalink=refs%2Fheads%2Fdev&tab=buildTypeStatusDiv&guest=1) or [CI server (Stable)](https://ci.fredboat.com/viewLog.html?buildId=lastSuccessful&buildTypeId=Lavalink_Build&tab=artifacts&guest=1)
 
 Put an [application.yml](https://github.com/freyacodes/Lavalink/blob/master/LavalinkServer/application.yml.example) file in your working directory.
 
@@ -52,9 +52,13 @@ Run with `java -jar Lavalink.jar`
 
 Docker images are available on the [Docker](https://hub.docker.com/r/fredboat/lavalink/) hub.
 
+## Getting Redis (Optional)
+
+Download the latest version of Redis Stable [Here](https://redis.io/download) and  Read the **[Redis Quick Start (Recommended)](https://redis.io/topics/quickstart)** to get started!
+
 ## Example Usage
 
-#### Create SpotiTube instance 
+#### Create SpotiTube instance w/o Redis
 ```js
 const STYT = new SpotiTube({
   spotify: {
@@ -64,6 +68,25 @@ const STYT = new SpotiTube({
   lavalink: {
     url: 'http://localhost:2869',
     password: 'password'
+  }
+})
+```
+
+#### Create SpotiTube instance w/ Redis
+```js
+const STYT = new SpotiTube({
+  spotify: {
+    clientID: 'CLIENTID',
+    secretKey: 'SECRETKEY'
+  },
+  lavalink: {
+    url: 'http://localhost:2869',
+    password: 'password'
+  },
+  redis: {
+    host: "127.0.0.1",
+    post: 6379,
+    db: 0 // This is optional
   }
 })
 ```
@@ -78,7 +101,7 @@ const STYT = new SpotiTube({
 
 ## To Do List
 
-- [ ] Redis Cache System
+ - [X] Redis Cache System
 
 ## 🤝 Support
 Contributions, issues, and feature requests are welcome! 
