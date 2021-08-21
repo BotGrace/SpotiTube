@@ -28,6 +28,8 @@ Master branch is on **[v1.0.4-dev (Dev)](https://github.com/BotGrace/SpotiTube/t
 
 ✅ Can set a limit on results
 
+✅ Redis Cache System
+
 ## Installation
  
 > NPM (Stable) => `npm install spotitube --save`
@@ -35,6 +37,8 @@ Master branch is on **[v1.0.4-dev (Dev)](https://github.com/BotGrace/SpotiTube/t
 > Github (Dev) => `npm install botGrace/SpotiTube#master`
 
 > Npm (Dev) => `npm install spotitube@dev`
+
+_Installing with Redis will make the system a lot faster_
 
 ## Documentation Site
 
