@@ -242,7 +242,7 @@ class SpotiTube extends EventEmitter {
     if (!url) throw new Error('You did not specify the URL of Spotify!');
     if (!this.validateURL(url)) throw new Error('Url is not a match to the regex!') ;
     try {
-      let data = await require('spotify-url-info').getData(url);
+      let data = await require('spotify-url-info')?.getData(url) || null;
       this.emit("debug", `${url} = ${data.type} from getInfo`)
       return data;
     } catch (error) {
@@ -388,7 +388,10 @@ class SpotiTube extends EventEmitter {
 
     let getInfo = await this.getInfo(url);
 
-    if (!getInfo) throw new Error(`${url} not found.`)
+    if (!getInfo) {
+      this.emit("debug", `${url} was not found`)
+      return null
+    }
 
     this.emit("debug", `${url} = ${getInfo.type} in convert`)
 
@@ -527,7 +530,7 @@ class SpotiTube extends EventEmitter {
       .then(data => {
         if (data?.error) throw new Error(data?.error || "Probs 404");
         if (!data?.tracks || data?.tracks?.length <= 0) return null;
-        else return {...data.tracks[0]?.info, track: data.tracks[0].track} || null
+        else return {...data.tracks[0]?.info, track: data.tracks[0]?.track} || null
       })
       .catch(err => {
         console.error(err);
