@@ -457,31 +457,35 @@ class SpotiTube extends EventEmitter {
         if ((failedLimit ? failed.length + songs.length : songs.length) >= limit) break;
         this.emit("debug", `${url} Current searches: ${(failedLimit ? failed.length + songs.length : songs.length)} w/ limit of ${limit}.`)
         let result;
-        try {
-          if (this.redis) {
-            let check = await this.getRedisCache(`${song.uri || 'spotify:' + song?.external_urls?.spotify}`);
-            if (!check) {
-              result = await this.searchLavaLink(`${song.name} ${song.artists.map(x => x.name).join(' ')}`);
-              await this.setRedisCache(`${song.uri || 'spotify:' + song?.external_urls?.spotify}`, result);
-              this.emit("debug", `${song?.external_urls?.spotify || song.uri} => ${result.uri} (Not From Cache)`)
+        if (!song?.uri || !song?.external_urls?.spotify) {
+          failed.push(song?.external_urls?.spotify || song?.uri || song?.name || "Unknown song")
+        } else {
+          try {
+            if (this.redis) {
+              let check = await this.getRedisCache(`${song.uri || 'spotify:' + song?.external_urls?.spotify}`);
+              if (!check) {
+                result = await this.searchLavaLink(`${song.name} ${song.artists.map(x => x.name).join(' ')}`);
+                await this.setRedisCache(`${song?.uri || 'spotify:' + song?.external_urls?.spotify}`, result);
+                this.emit("debug", `${song?.external_urls?.spotify || song?.uri} => ${result.uri} (Not From Cache)`)
+              } else {
+                result = check;
+                this.emit("debug", `${song?.external_urls?.spotify || song?.uri} => ${result.uri} (From Cache)`)
+              }
             } else {
-              result = check;
-              this.emit("debug", `${song?.external_urls?.spotify || song.uri} => ${result.uri} (From Cache)`)
+              result = await this.searchLavaLink(`${song.name} ${song.artists.map(x => x.name).join(' ')}`);
+              this.emit("debug", `${song?.external_urls?.spotify || song?.uri} => ${result.uri}  (Not From Cache. Redis not being used)`)
             }
-          } else {
-            result = await this.searchLavaLink(`${song.name} ${song.artists.map(x => x.name).join(' ')}`);
-            this.emit("debug", `${song?.external_urls?.spotify || song.uri} => ${result.uri}  (Not From Cache. Redis not being used)`)
+          } catch (error) {
+            result = null;
+            this.emit("debug", `${song?.external_urls?.spotify || song?.uri || song?.name || "Unknown song"} was not found`)
+            this.emit("error", error)
           }
-        } catch (error) {
-          result = null;
-          this.emit("debug", `${song?.external_urls?.spotify || song.uri} was not found`)
-          this.emit("error", error)
+          if (!result) failed.push(song?.external_urls?.spotify || song?.uri || song?.name || "Unknown song")
+          else songs.push({
+            url: result.uri,
+            info: result
+          })
         }
-        if (!result) failed.push(song?.external_urls?.spotify || song.uri)
-        else songs.push({
-          url: result.uri,
-          info: result
-        })
       }
       this.emit("debug", `${getInfo?.external_urls?.spotify || getInfo.uri} was converted to ${songs.length} with ${failed?.length} with limit ${limit}`)
       return {
@@ -529,7 +533,7 @@ class SpotiTube extends EventEmitter {
       .then(res => res.json())
       .then(data => {
         if (data?.error) throw new Error(data?.error || "Probs 404");
-        if (!data?.tracks || data?.tracks?.length <= 0) return null;
+        if (!data?.tracks || data?.tracks?.length <= 0 || !data) return null;
         else return {...data.tracks[0]?.info, track: data.tracks[0]?.track} || null
       })
       .catch(err => {
