@@ -93,7 +93,7 @@ class SpotiTube extends EventEmitter {
       this.redis.on("error", err => {
         if (err?.toString()?.includes('ECONNRESET')) {
           setTimeout(() => {
-            redisCon = redis.createClient({...Config.redisVote});
+            this.redis = this.redis.createClient(this.options.redis);
           }, 15000);
         }
       });
@@ -493,7 +493,7 @@ class SpotiTube extends EventEmitter {
           failed: failed,
           completed: songs
         },
-        info: {...getInfo, tracks: tracks.map(g => g.track.id) || []},
+        info: {...getInfo, tracks: tracks.map(g => `${g?.uri || 'spotify:' + g?.external_urls?.spotify}`) || []},
         limit: limit,
         converted: {
           failed: failed?.length || 0,
