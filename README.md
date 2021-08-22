@@ -106,6 +106,7 @@ const STYT = new SpotiTube({
 ## To Do List
 
  - [X] Redis Cache System
+ - [ ] Support Mutiple Lavalinks
 
 ## 🤝 Support
 Contributions, issues, and feature requests are welcome! 
