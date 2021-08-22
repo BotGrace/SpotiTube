@@ -493,7 +493,9 @@ class SpotiTube extends EventEmitter {
           failed: failed,
           completed: songs
         },
-        info: {...getInfo, tracks: tracks.map(g => `${g?.track.uri || 'spotify:' + g?.track?.external_urls?.spotify}`) || []},
+        info: {...getInfo, tracks: tracks.filter(g => !g?.track?.uri).map(g => {
+          return `${g?.track?.uri || 'spotify:' + g?.track?.external_urls?.spotify}`
+        }) || []},
         limit: limit,
         converted: {
           failed: failed?.length || 0,
