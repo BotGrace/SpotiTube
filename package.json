@@ -1,12 +1,12 @@
 {
   "name": "spotitube",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "A Converter That Will Convert Your Spotify To YT with LavaLink.",
   "main": "src/index.js",
   "scripts": {
     "docs:build": "yarn run changelog && docma build",
     "docs:dev": "yarn run docs:build && docma serve",
-    "changelog": "auto-changelog --output CHANGELOG.md --template keepachangelog --commit-limit false --unreleased"
+    "changelog": "auto-changelog --output CHANGELOG.md --template keepachangelog --commit-limit false --unreleased --package"
   },
   "repository": {
     "type": "git",
