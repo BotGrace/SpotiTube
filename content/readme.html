@@ -1,55 +1,102 @@
 
-<html><head></head><body><h2 id="spotitube">SpotiTube</h2>
+<html><head></head><body><h1 id="spotitube">SpotiTube</h1>
 <hr />
 <h3 id="a-converter-that-will-convert-your-spotify-to-yt-with-lavalink">A Converter That Will Convert Your Spotify To YT with LavaLink.</h3>
 <p><a href="https://discordapp.com/invite/GuGcuwdYwg"><img src="https://img.shields.io/discord/469387242767646730?style=flat-square&amp;logo=discord&amp;logoColor=white" alt="Discord" style="max-width: 100%;"></a>
 <img src="https://img.shields.io/github/stars/BotGrace/SpotiTube?style=flat-square" alt="Github Stars" style="max-width: 100%;">
 <img src="https://img.shields.io/github/issues-raw/BotGrace/SpotiTube?style=flat-square" alt="GitHub issues" style="max-width: 100%;">
-<a href="https://www.npmjs.com/package/spotitube"><img src="https://img.shields.io/npm/v/spotitube?style=flat-square" alt="npm" style="max-width: 100%;"></a>
-<img src="https://img.shields.io/snyk/vulnerabilities/npm/spotitube?style=flat-square" alt="Snyk Vulnerabilities for npm package" style="max-width: 100%;"> 
-<img src="https://img.shields.io/npm/l/spotitube?style=flat-square" alt="NPM" style="max-width: 100%;"></p>
+<a href="https://www.npmjs.com/package/spotitube"><img src="https://img.shields.io/npm/v/spotitube?style=flat-square&amp;maxAge=3600" alt="npm" style="max-width: 100%;"></a>
+<a href="https://www.npmjs.com/package/spotitube"><img src="https://img.shields.io/npm/dt/spotitube?style=flat-square&amp;maxAge=3600" alt="npm downloads" style="max-width: 100%;"></a>
+<img src="https://img.shields.io/snyk/vulnerabilities/npm/spotitube?style=flat-square&amp;maxAge=3600" alt="Snyk Vulnerabilities for npm package" style="max-width: 100%;"> 
+<img src="https://img.shields.io/npm/l/spotitube?style=flat-square&amp;maxAge=3600" alt="NPM" style="max-width: 100%;"></p>
 <blockquote>
-<p>Created by the Grace Bot Dev Team</p>
+<p>Created with ❤️ by the Grace Bot Dev Team <em>aka Spooder/Gaeta</em>!</p>
 </blockquote>
-<h3 id="features">Features</h3>
+<h2 id="warning"><strong>WARNING</strong></h2>
+<hr />
+<p>Master branch is on <strong><a href="https://github.com/BotGrace/SpotiTube/tree/master">v1.0.4-dev (Dev)</a></strong>! This almost a full rewrite from <strong><a href="https://github.com/BotGrace/SpotiTube/tree/v1.0.3">v1.0.3 (Stable)</a></strong> branch! Please check the readme and the stable docs to understand v1.0.3!</p>
+<h2 id="features">Features</h2>
+<hr />
 <p>✅ Stable</p>
 <p>✅ Straightforward</p>
-<p>✅ Works with Lavalink</p>
+<p>✅ Works with Multiple Lavalinks at a time</p>
 <p>✅ Works with any Spotify Link</p>
-<h3 id="installation">Installation</h3>
+<p>✅ Works with Huge Spotify Playlist</p>
+<p>✅ Can set a limit on results</p>
+<p>✅ Redis Cache System</p>
+<h2 id="installation">Installation</h2>
+<hr />
 <blockquote>
-<p>NPM (Stable) =&gt; npm install SpotiTube --save</p>
+<p>NPM (Stable) =&gt; <code>npm install spotitube --save</code></p>
 </blockquote>
 <blockquote>
-<p>Github (Dev) =&gt; npm install botGrace/SpotiTube#master</p>
+<p>Github (Dev) =&gt; <code>npm install botGrace/SpotiTube#master</code></p>
 </blockquote>
 <blockquote>
-<p>Npm (Dev) =&gt; npm install SpotiTube@dev</p>
+<p>Npm (Dev) =&gt; <code>npm install spotitube@dev</code></p>
 </blockquote>
-<h3 id="documentation-site">Documentation Site</h3>
+<p><em>Installing with Redis will make the system a lot faster</em></p>
+<h2 id="documentation-site">Documentation Site</h2>
+<hr />
 <blockquote>
-<p><a href="https://SpotiTube.git.gracebot.net/">https://SpotiTube.git.gracebot.net/</a></p>
+<p>Stable =&gt; <a href="https://SpotiTube.git.gracebot.net/">https://SpotiTube.git.gracebot.net/</a></p>
 </blockquote>
-<h3 id="getting-lavalink">Getting Lavalink</h3>
-<p>Download the latest binaries from the <a href="https://ci.fredboat.com/viewType.html?buildTypeId=Lavalink_Build&amp;branch_Lavalink=refs%2Fheads%2Fdev&amp;tab=buildTypeStatusDiv&amp;guest=1">CI server (DEV BRANCH) (Recommended)</a> or <a href="https://ci.fredboat.com/viewLog.html?buildId=lastSuccessful&amp;buildTypeId=Lavalink_Build&amp;tab=artifacts&amp;guest=1">CI server Normal</a></p>
+<blockquote>
+<p>Dev =&gt; <code>git clone https://github.com/BotGrace/SpotiTube#master &amp;&amp; cd ./SpotiTube &amp;&amp; yarn install &amp;&amp; yarn run docs:dev</code></p>
+</blockquote>
+<h2 id="getting-lavalink">Getting Lavalink</h2>
+<hr />
+<p>Download the latest binaries from the <a href="https://ci.fredboat.com/viewType.html?buildTypeId=Lavalink_Build&amp;branch_Lavalink=refs%2Fheads%2Fdev&amp;tab=buildTypeStatusDiv&amp;guest=1">CI server (DEV BRANCH) (Recommended)</a> or <a href="https://ci.fredboat.com/viewLog.html?buildId=lastSuccessful&amp;buildTypeId=Lavalink_Build&amp;tab=artifacts&amp;guest=1">CI server (Stable)</a></p>
 <p>Put an <a href="https://github.com/freyacodes/Lavalink/blob/master/LavalinkServer/application.yml.example">application.yml</a> file in your working directory.</p>
 <p>Run with <code>java -jar Lavalink.jar</code></p>
 <p>Docker images are available on the <a href="https://hub.docker.com/r/fredboat/lavalink/">Docker</a> hub.</p>
-<h3 id="example-usage">Example Usage</h3>
-<p>Create SpotiTube instance </p>
+<h2 id="getting-redis--optional-">Getting Redis (Optional)</h2>
+<hr />
+<p>Download the latest version of Redis Stable <a href="https://redis.io/download">Here</a> and  Read the <strong><a href="https://redis.io/topics/quickstart">Redis Quick Start (Recommended)</a></strong> to get started!</p>
+<h2 id="example-usage">Example Usage</h2>
+<hr />
+<h4 id="create-spotitube-instance-w-o-redis">Create SpotiTube instance w/o Redis</h4>
 <pre><code class="js">const STYT = new SpotiTube({
   spotify: {
     clientID: 'CLIENTID',
     secretKey: 'SECRETKEY'
   },
-  lavalink: {
+  lavalink: [{
     url: 'http://localhost:2869',
-    password: 'password'
+    password: 'password',
+    name: 'bobross'
+  }]
+})</code></pre>
+<h4 id="create-spotitube-instance-w--redis">Create SpotiTube instance w/ Redis</h4>
+<pre><code class="js">const STYT = new SpotiTube({
+  spotify: {
+    clientID: 'CLIENTID',
+    secretKey: 'SECRETKEY'
+  },
+  lavalink: [{
+    url: 'http://localhost:2869',
+    password: 'password',
+    name: 'bobross'
+  }],
+  redis: {
+    host: "127.0.0.1",
+    post: 6379,
+    db: 0 // This is optional
   }
 })</code></pre>
-<p>Convert Spotify To YT</p>
+<h4 id="convert-spotify-to-yt">Convert Spotify To YT</h4>
 <pre><code class="js">(async () =&gt; {
-  const result = await STYT.convert('https://open.spotify.com/track/5nTtCOCds6I0PHMNtqelas');
+  const result = await STYT.convert('https://open.spotify.com/track/5nTtCOCds6I0PHMNtqelas', 15);
   console.log(result);
 })();</code></pre>
+<h2 id="to-do-list">To Do List</h2>
+<hr />
+<ul>
+<li><input checked="" disabled="" type="checkbox"> Redis Cache System</li>
+<li><input checked="" disabled="" type="checkbox"> Support Mutiple Lavalinks</li>
+</ul>
+<h2 id="---support">🤝 Support</h2>
+<hr />
+<p>Contributions, issues, and feature requests are welcome! </p>
+<p>Give a ⭐️ if you like this project!</p>
 </body></html>
