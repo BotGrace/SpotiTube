@@ -4,8 +4,8 @@
   "description": "A Converter That Will Convert Your Spotify To YT with LavaLink.",
   "main": "src/index.js",
   "scripts": {
-    "docs:build": "yarn run changelog && docma build",
-    "docs:dev": "yarn run docs:build && docma serve",
+    "docs:build": "docma build",
+    "docs:dev": "yarn run changelog && yarn run docs:build && docma serve",
     "changelog": "auto-changelog --output CHANGELOG.md --template keepachangelog --commit-limit false --unreleased --package"
   },
   "repository": {
