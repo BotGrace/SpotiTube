@@ -25,10 +25,10 @@ class SpotiTube extends EventEmmiter {
    * @param {String} options.lavalink.password Lavalink password 
    * @param {String} [options.lavalink.name] Lavalink node name
    * @param {Object=} options.redis The Object for Redis (To use redis put host & port)
-   * @param {String=} options.lavalink.host The ip of redis (Redis default is 127.0.0.1)
-   * @param {String=} options.lavalink.password The password of redis if one exist
-   * @param {Number=} [options.lavalink.port=6379] The port of redis defaults to 6379
-   * @param {Number=} options.lavalink.db The db to use on redis
+   * @param {String=} options.redis.host The ip of redis (Redis default is 127.0.0.1)
+   * @param {String=} options.redis.password The password of redis if one exist
+   * @param {Number=} [options.redis.port=6379] The port of redis defaults to 6379
+   * @param {Number=} options.redis.db The db to use on redis
    * @returns {Object}
    * 
    * @example
