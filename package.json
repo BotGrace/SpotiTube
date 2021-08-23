@@ -4,8 +4,9 @@
   "description": "A Converter That Will Convert Your Spotify To YT with LavaLink.",
   "main": "src/index.js",
   "scripts": {
-    "docs:build": "docma build",
-    "docs:dev": "docma build && docma serve"
+    "docs:build": "yarn run changelog && docma build",
+    "docs:dev": "yarn run docs:build && docma serve",
+    "changelog": "auto-changelog --output CHANGELOG.md --template keepachangelog --commit-limit false --unreleased "
   },
   "repository": {
     "type": "git",
@@ -27,13 +28,16 @@
   },
   "homepage": "https://github.com/BotGrace/SpotiTube#readme",
   "dependencies": {
+    "@tbnritzdoge/events": "^1.0.1",
     "node-fetch": "^2.6.1",
     "redis": "^3.1.2",
     "spotify-uri": "^2.2.0",
     "spotify-url-info": "^2.2.3",
-    "spotify-web-api-node": "^5.0.2"
+    "spotify-web-api-node": "^5.0.2",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
+    "auto-changelog": "^2.3.0",
     "docma": "^3.2.2",
     "jsdoc": "^3.6.7"
   }

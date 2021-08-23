@@ -1,14 +1,15 @@
 
 const Util = new require('./util');
-const fetch = require("node-fetch");
 const SpotifyWebApi = require('spotify-web-api-node');
-const EventEmitter = require("events");
+const LavaLinkManager = require("./managers/LavaLinkManager");
+const EventEmmiter = require('@tbnritzdoge/events');
 
 /**
  * Converts Spotify To YT with the help of LavaLink
+ * @class SpotiTube
  */
 
-class SpotiTube extends EventEmitter {
+class SpotiTube extends EventEmmiter {
   /**
    * @description The options that SpotiTube will use to convert and link with lavalink.
    * 
@@ -19,9 +20,10 @@ class SpotiTube extends EventEmitter {
    * @param {String} [options.spotify.clientAccessToken=null] Client Access Token. This will automaticlly generate
    * @param {Number} [options.spotify.clientAccessExpire=null] Client Access Token Expire Time. This will automaticlly generate
    * @param {RegExp} [options.spotify.regex=/(https?:\/\/open\.spotify\.com\/(playlist|track)\/[a-zA-Z0-9]+|spotify:(playlist|track):[a-zA-Z0-9])/g] The regex to vaildate spotify Strings
-   * @param {Object} options.lavalink The Object for LavaLink
+   * @param {Object[]} options.lavalink The Object for LavaLink
    * @param {String} options.lavalink.url The lavalink url w/ http:// or https://
    * @param {String} options.lavalink.password Lavalink password 
+   * @param {String} [options.lavalink.name] Lavalink node name
    * @param {Object=} options.redis The Object for Redis (To use redis put host & port)
    * @param {String=} options.lavalink.host The ip of redis (Redis default is 127.0.0.1)
    * @param {String=} options.lavalink.password The password of redis if one exist
@@ -35,10 +37,10 @@ class SpotiTube extends EventEmitter {
    *      clientID: 'CLIENTID',
    *      secretKey: 'SECRETKEY'
    *    },
-   *    lavalink: {
+   *    lavalink: [{
    *      url: 'http://localhost:2869',
    *      password: 'password'
-   *    },
+   *    }],
    *   redis: {
    *      host: "127.0.0.1",
    *      post: 6379,
@@ -47,7 +49,7 @@ class SpotiTube extends EventEmitter {
    * })
    */
   constructor(options = {}) {
-    super();
+    super()
     this.options = Util.mergeDefault({
       debug: false,
       spotify: {
@@ -57,10 +59,10 @@ class SpotiTube extends EventEmitter {
         clientAccessExpire: null,
         regex: /(https?:\/\/open\.spotify\.com\/(playlist|track)\/[a-zA-Z0-9]+|spotify:(playlist|track):[a-zA-Z0-9])/g
       },
-      lavalink: {
+      lavalink: [{
         url: null,
         password: null
-      },
+      }],
       redis: {
         host: null,
         password: null,
@@ -69,16 +71,26 @@ class SpotiTube extends EventEmitter {
       }
     }, options)
 
+    /**
+     * The list of supported spotify links we support
+     * @type {String[]}
+     */
     this.supportedTypes = ['playlist', 'track'];
 
     // Check for correct strings
     if (!this.options.spotify.clientID || !this.options.spotify.secretKey) throw new Error('Missing Spotify Client ID Or Spotify Secrect Key');
-    if (!this.options.lavalink.url || !this.options.lavalink.password) throw new Error('Missing Lava Link URL Or Lava Link Password');
-    
-    // Update URL to have URL refs
-    this.options.lavalink.url = new URL(this.options.lavalink.url);
+
+    /**
+     * The Manager that stores all the lavalinks
+     * @type {LavaLinkManager}
+     */
+    this.lavalinks = new LavaLinkManager(this.options.lavalink);
 
     // Load Creds
+    /**
+     * The Spotify Web API
+     * @type {SpotifyWebApi}
+     */
     this.spotifySearch = new SpotifyWebApi({
       clientId: this.options.spotify.clientID,
       clientSecret: this.options.spotify.secretKey
@@ -110,7 +122,6 @@ class SpotiTube extends EventEmitter {
       // Redis Reconnecting Event
       this.redis.on("reconnecting", (...args) => this.emit('debug', ...args));
     } else {
-      console.log("hi")
       this.redis = null;
       this.emit("debug", "No Redis Host & Port. Redis will not be used.")
     }
@@ -129,7 +140,8 @@ class SpotiTube extends EventEmitter {
    * This will include Redis Events
    * 
    * @event SpotiTube#debug
-   * @param {string} info The debug info
+   * @param {String} info The debug info
+   * @memberof SpotiTube
    * 
    * @example
    * SpotiTube.on("debug", console.log);
@@ -141,6 +153,7 @@ class SpotiTube extends EventEmitter {
    * 
    * @event SpotiTube#error
    * @param {Error} error The error object
+   * @memberof SpotiTube
    * 
    * @example
    * SpotiTube.on("error", console.log);
@@ -154,6 +167,7 @@ class SpotiTube extends EventEmitter {
    * @param {String} [settings.token_type=Bearer] The token type.
    * @param {Number} settings.expires_in The time of when it will expire in seconds.
    * @returns {Object}
+   * @memberof SpotiTube
    */
 
   initCreds (settings = {}) {
@@ -185,6 +199,7 @@ class SpotiTube extends EventEmitter {
    * 
    * @param {Url} url The URL of the Spotify Track Or Playlist
    * @returns {Boolean}
+   * @memberof SpotiTube
    * 
    * @example
    * (async () => {
@@ -231,6 +246,7 @@ class SpotiTube extends EventEmitter {
    * 
    * @param {URL} url The url you want to check.
    * @returns {Object}
+   * @memberof SpotiTube
    * 
    * @example
    * (async () => {
@@ -260,6 +276,7 @@ class SpotiTube extends EventEmitter {
    * @param {Number} [options.limit=100] How many tracks to skip (100 Max with 0 Min)
    * @returns {Object}
    * @private
+   * @memberof SpotiTube
    */
 
   async getPlaylist (id, options = {}) {
@@ -279,6 +296,7 @@ class SpotiTube extends EventEmitter {
    * @param {String} key The url you want to check.
    * @returns {Object}
    * @private
+   * @memberof SpotiTube
    */
 
   async getRedisCache (key) {
@@ -314,6 +332,7 @@ class SpotiTube extends EventEmitter {
    * @param {*} data The data to be cached.
    * @returns {*}
    * @private
+   * @memberof SpotiTube
    */
 
    async setRedisCache (key, data) {
@@ -351,6 +370,7 @@ class SpotiTube extends EventEmitter {
    * @param {Number} [limit=20] Limit how many songs we should convert. Use Infinity to allow the entire playlist, but the bigger the playlist the longer it will take to convert
    * @param {Boolean} [failedLimit=true] Let failed song searches include in the overall limit checks.
    * @returns {Object}
+   * @memberof SpotiTube
    * 
    * @example
    * (async () => {
@@ -397,13 +417,30 @@ class SpotiTube extends EventEmitter {
 
     if (!this.supportedTypes.includes(getInfo.type)) throw new Error(`${getInfo.type} is not a support format only ${this.supportedTypes.join()}`);
 
+    const node = await this.lavalinks.getBestNode();
+    this.emit("debug", `Using node ${node.name}`);
+
     if (getInfo.type === "track") {
       // track
       this.emit("debug", `${url} is an ${getInfo.type} so limits will not work on this`)
       let result;
       try {
-        result = await this.searchLavaLink(`${getInfo.name} ${getInfo.artists.map(x => x.name).join(' ')}`)
-        this.emit("debug", `${url} => ${result.uri}`)
+        if (this.redis) {
+          let check = await this.getRedisCache(`${getInfo.uri || 'spotify:' + getInfo?.external_urls?.spotify}`);
+          if (!check) {
+            result = await node.search(`${getInfo.name} ${getInfo.artists.map(x => x.name).join(' ')}`);
+            await this.setRedisCache(`${getInfo?.uri || 'spotify:' + getInfo?.external_urls?.spotify}`, result);
+            this.emit("debug", `${getInfo?.external_urls?.spotify || getInfo?.uri} => ${result.uri} (Not From Cache)`)
+          } else {
+            result = check;
+            this.emit("debug", `${getInfo?.external_urls?.spotify || getInfo?.uri} => ${result.uri} (From Cache)`)
+          }
+        } else {
+          const node = await this.lavalinks.getBestNode();
+          this.emit("debug", `Using node ${node.name}`)
+          result = await node.search(`${getInfo.name} ${getInfo.artists.map(x => x.name).join(' ')}`);
+          this.emit("debug", `${getInfo?.external_urls?.spotify || getInfo?.uri} => ${result.uri}  (Not From Cache. Redis not being used)`)
+        }
       } catch (error) {
         result = null;
         this.emit("debug", `${url} was not found`)
@@ -464,7 +501,7 @@ class SpotiTube extends EventEmitter {
             if (this.redis) {
               let check = await this.getRedisCache(`${song.uri || 'spotify:' + song?.external_urls?.spotify}`);
               if (!check) {
-                result = await this.searchLavaLink(`${song.name} ${song.artists.map(x => x.name).join(' ')}`);
+                result = await node.search(`${song.name} ${song.artists.map(x => x.name).join(' ')}`);
                 await this.setRedisCache(`${song?.uri || 'spotify:' + song?.external_urls?.spotify}`, result);
                 this.emit("debug", `${song?.external_urls?.spotify || song?.uri} => ${result.uri} (Not From Cache)`)
               } else {
@@ -472,7 +509,7 @@ class SpotiTube extends EventEmitter {
                 this.emit("debug", `${song?.external_urls?.spotify || song?.uri} => ${result.uri} (From Cache)`)
               }
             } else {
-              result = await this.searchLavaLink(`${song.name} ${song.artists.map(x => x.name).join(' ')}`);
+              result = await node.search(`${song.name} ${song.artists.map(x => x.name).join(' ')}`);
               this.emit("debug", `${song?.external_urls?.spotify || song?.uri} => ${result.uri}  (Not From Cache. Redis not being used)`)
             }
           } catch (error) {
@@ -514,34 +551,20 @@ class SpotiTube extends EventEmitter {
 
   /**
    * @description Search on lavalink.
+   * @deprecated Use {@link LavaLink.search} instead
    * 
    * @param {String} query The search query to send to lavalink.
    * @returns {Object}
    * 
    * @example
    * (async () => {
-   *    const result = await STYT.search('say something');
+   *    const result = await STYT.searchLavaLink('say something');
    *    console.log(result);
    * })();
    */
 
-  searchLavaLink (query) {
-    if (!query) throw new Error("Missing Search")
-    if (!this.options.lavalink.url || !this.options.lavalink.password) throw new Error('Missing Lava Link URL Or Lava Link Password');
-
-    let searchRequest = new URL(this.options.lavalink.url.href + 'loadtracks');
-    searchRequest.searchParams.append("identifier", 'ytsearch:' + query)
-    return fetch(searchRequest.toString(), { headers: { Authorization: this.options.lavalink.password } })
-      .then(res => res.json())
-      .then(data => {
-        if (data?.error) throw new Error(data?.error || "Probs 404");
-        if (!data?.tracks || data?.tracks?.length <= 0 || !data) return null;
-        else return {...data.tracks[0]?.info, track: data.tracks[0]?.track} || null
-      })
-      .catch(err => {
-        console.error(err);
-        return null;
-      });
+  searchLavaLink () {
+    process.emitWarning('This function event is deprecated. Use lavalink search instead', 'DeprecationWarning');
   }
 
 }

@@ -35,6 +35,9 @@ jobs:
       - name: Install Pacakges
         run: yarn install --frozen-lockfile
 
+      - name: Change Change Log
+        run: yarn run changelog
+
       - name: Deprecate old versions
         run: npm deprecate spotitube@"~$(jq --raw-output '.version' package.json)" "no longer supported" || true
         env:

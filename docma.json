@@ -4,7 +4,8 @@
       "./src/index.js",
       "./src/*.js",
       "./src/**/*.js",
-      "./README.md"
+      "./README.md",
+      "CHANGELOG.md"
   ],
   "dest":"./docs",
   "jsdoc":{
@@ -56,6 +57,11 @@
                       "label": "Home",
                       "href":".",
                       "iconClass": "fas fa-home"
+                  },
+                  {
+                    "label": "Change Log",
+                    "href": "?content=changelog",
+                    "iconClass": "fas fa-book"
                   },
                   {
                       "label":"Documentation",
