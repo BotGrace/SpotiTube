@@ -11,9 +11,6 @@
 
 > Created with ❤️ by the Grace Bot Dev Team _aka Spooder/Gaeta_!
 
-## **WARNING**
-Master branch is on **[v1.0.4-dev (Dev)](https://github.com/BotGrace/SpotiTube/tree/master)**! This almost a full rewrite from **[v1.0.3 (Stable)](https://github.com/BotGrace/SpotiTube/tree/v1.0.3)** branch! Please check the readme and the stable docs to understand v1.0.3!
-
 ## Features
 
 ✅ Stable
