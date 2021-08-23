@@ -20,7 +20,7 @@ Master branch is on **[v1.0.4-dev (Dev)](https://github.com/BotGrace/SpotiTube/t
 
 ✅ Straightforward
 
-✅ Works with Lavalink
+✅ Works with Multiple Lavalinks at a time
 
 ✅ Works with any Spotify Link
 
@@ -69,10 +69,11 @@ const STYT = new SpotiTube({
     clientID: 'CLIENTID',
     secretKey: 'SECRETKEY'
   },
-  lavalink: {
+  lavalink: [{
     url: 'http://localhost:2869',
-    password: 'password'
-  }
+    password: 'password',
+    name: 'bobross'
+  }]
 })
 ```
 
@@ -83,10 +84,11 @@ const STYT = new SpotiTube({
     clientID: 'CLIENTID',
     secretKey: 'SECRETKEY'
   },
-  lavalink: {
+  lavalink: [{
     url: 'http://localhost:2869',
-    password: 'password'
-  },
+    password: 'password',
+    name: 'bobross'
+  }],
   redis: {
     host: "127.0.0.1",
     post: 6379,
@@ -106,7 +108,7 @@ const STYT = new SpotiTube({
 ## To Do List
 
  - [X] Redis Cache System
- - [ ] Support Mutiple Lavalinks
+ - [X] Support Mutiple Lavalinks
 
 ## 🤝 Support
 Contributions, issues, and feature requests are welcome! 
