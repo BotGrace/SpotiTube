@@ -51,7 +51,6 @@ class SpotiTube extends EventEmmiter {
   constructor(options = {}) {
     super()
     this.options = Util.mergeDefault({
-      debug: false,
       spotify: {
         clientID: null,
         secretKey: null,
@@ -111,23 +110,23 @@ class SpotiTube extends EventEmmiter {
       });
 
       // Redis Error Event
-      this.redis.on("error", (...args) => this.emit('error', ...args));
+      this.redis.on("error", (args) => this.emit('error', args || "Redis Error"));
 
       // Redis Ready Event
-      this.redis.on("ready", (...args) => this.emit('debug', ...args));
+      this.redis.on("ready", (args) => this.emit('debug', args || "Redis Ready"));
 
       // Redis Connect Event
-      this.redis.on("connect", (...args) => this.emit('debug', ...args));
+      this.redis.on("connect", (args) => this.emit('debug', args || "Redis Connected"));
 
       // Redis Reconnecting Event
-      this.redis.on("reconnecting", (...args) => this.emit('debug', ...args));
+      this.redis.on("reconnecting", (args) => this.emit('debug', args || "Redis Reconnecting"));
     } else {
       this.redis = null;
       this.emit("debug", "No Redis Host & Port. Redis will not be used.")
     }
 
     // Load Any Unknown Errors
-    process.on('uncaughtException', (...args) => this.emit('error', ...args));
+    process.on('uncaughtException', (args) => this.emit('error', args));
 
     // Retrieve an access token.
     if (this.options.spotify.clientAccessToken && this.options.spotify.clientAccessExpire) this.initCreds({force: true, access_token: this.options.spotify.clientAccessToken, expires_in: this.options.spotify.clientAccessExpire})
