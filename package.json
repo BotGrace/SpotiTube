@@ -6,7 +6,7 @@
   "scripts": {
     "docs:build": "yarn run changelog && docma build",
     "docs:dev": "yarn run docs:build && docma serve",
-    "changelog": "auto-changelog --output CHANGELOG.md --template keepachangelog --commit-limit false --unreleased "
+    "changelog": "auto-changelog --output CHANGELOG.md --template keepachangelog --commit-limit false --unreleased"
   },
   "repository": {
     "type": "git",
