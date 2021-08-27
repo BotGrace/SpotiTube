@@ -437,7 +437,7 @@ class SpotiTube extends EventEmmiter {
         } else {
           const node = await this.lavalinks.getBestNode();
           this.emit("debug", `Using node ${node.name}`)
-          result = await node.search(`${getInfo.name} ${getInfo.artists.map(x => x.name).join(' ')}`);
+          result = await node.search(`${getInfo.name} ${getInfo.artists?.map(x => x.name).join(' ')}`);
           this.emit("debug", `${getInfo?.external_urls?.spotify || getInfo?.uri} => ${result.uri}  (Not From Cache. Redis not being used)`)
         }
       } catch (error) {
@@ -450,7 +450,14 @@ class SpotiTube extends EventEmmiter {
           failed: !result ? [`${getInfo?.external_urls?.spotify || getInfo.uri}`] : [],
           completed: result ? [{
             url: result.uri,
-            info: result
+            info: result,
+            track: result.uri.track,
+            spotify: {
+              key: getInfo?.uri,
+              url: getInfo?.external_urls?.spotify,
+              name: getInfo?.name,
+              artists: getInfo?.artists || []
+            }
           }] : []
         },
         info: getInfo,
@@ -519,7 +526,14 @@ class SpotiTube extends EventEmmiter {
           if (!result) failed.push(song?.external_urls?.spotify || song?.uri || song?.name || "Unknown song")
           else songs.push({
             url: result.uri,
-            info: result
+            info: result,
+            track: result.uri.track,
+            spotify: {
+              key: song?.uri,
+              url: song?.external_urls?.spotify,
+              name: song?.name,
+              artists: song?.artists || []
+            }
           })
         }
       }
