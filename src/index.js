@@ -227,7 +227,7 @@ class SpotiTube extends EventEmmiter {
   async validateURL (url) {
     if (!url) throw new Error('You did not specify the URL of Spotify!');
     if (typeof url !== 'string') return false;
-    if (this.options.spotify.regex.test(url)) {
+    if (new RegExp(this.options.spotify.regex).test(url)) {
       let parsedURL = {}
       try {
         parsedURL = require('spotify-uri')?.parse(url) || null;
